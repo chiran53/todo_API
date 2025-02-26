@@ -1,5 +1,6 @@
 from rest_framework import generics
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 from .models import Task
 from .serializers import TaskSerializer
 
@@ -14,9 +15,15 @@ class TaskGeneric(generics.GenericAPIView):
         }
         return Response(api_urls)
 
+class Taskpagination(PageNumberPagination):
+    page_size = 5
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
 class TaskList(generics.ListAPIView):
-    queryset = Task.objects.all()
+    queryset = Task.objects.all().order_by('-created_at')
     serializer_class = TaskSerializer
+    pagination_class = Taskpagination
 
 class TaskDetail(generics.RetrieveAPIView):
     queryset = Task.objects.all()
