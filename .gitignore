@@ -1,0 +1,5 @@
+.env
+script.py 
+env/
+__pycache__/
+*/migrations/
