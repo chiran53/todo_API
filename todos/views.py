@@ -25,6 +25,18 @@ class TaskList(generics.ListAPIView):
     serializer_class = TaskSerializer
     pagination_class = Taskpagination
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        status = self.request.query_params.get('status', None)
+        if status:
+            queryset = queryset.filter(status=status)
+
+        priority = self.request.query_params.get('priority', None)
+        if priority:
+            queryset = queryset.filter(priority=priority)
+        return queryset
+
 class TaskDetail(generics.RetrieveAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
